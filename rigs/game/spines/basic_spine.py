@@ -9,7 +9,12 @@ class Rig(BaseSpineRig, basic_spine):
     """
     Spine rig with fixed pivot, hip/chest controls and tweaks.
     """
-    pass
+    
+    def rig_mch_control_bones(self):
+        mch = self.bones.mch
+        # do nothing...
+        # self.make_constraint(mch.pivot, 'COPY_TRANSFORMS', self.fk_result.hips[-1], influence=0.5)
+
 
 def create_sample(obj):
     """ Create a sample metarig for this rig type.
