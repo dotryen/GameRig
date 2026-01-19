@@ -7,6 +7,10 @@ from rigify.base_rig import stage
 
 class Rig(BaseSkinChainRigWithRotationOption, basic_chain):
     
+    def initialize(self):
+        super().initialize()
+
+        self.enable_scale = self.params.enable_scale
 
     @stage.parent_bones
     def parent_deform_chain(self):
@@ -18,8 +22,27 @@ class Rig(BaseSkinChainRigWithRotationOption, basic_chain):
         self.clean_def_hierarchy(self.bones.deform[0])
 
     def rig_deform_bone(self, i, deform, org):
-        self.make_constraint(deform, 'COPY_LOCATION', org)
-        self.make_constraint(deform, 'COPY_ROTATION', org)
+        if self.enable_scale:
+            self.make_constraint(deform, 'COPY_TRANSFORMS', org)
+        else:
+            self.make_constraint(deform, 'COPY_LOCATION', org)
+            self.make_constraint(deform, 'COPY_ROTATION', org)
+
+    @classmethod
+    def add_parameters(self, params):
+        super().add_parameters(params)
+        params.enable_scale = bpy.props.BoolProperty(
+            name="Scale",
+            default=False,
+            description="Deformation bones will inherit the scale of their ORG bones. Enable this only if you know what you are doing because scale can break your rig in the game engine"
+        )
+
+    @classmethod
+    def parameters_ui(self, layout, params):
+        super().parameters_ui(layout, params)
+
+        row = layout.row()
+        row.prop(params, "enable_scale")
 
 
 def create_sample(obj):
