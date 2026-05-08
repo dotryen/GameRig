@@ -84,7 +84,7 @@ class Rig(BaseSkinChainRigWithRotationOption, basic_chain):
         else:
             self.make_constraint(deform, 'COPY_LOCATION', org)
             self.make_constraint(deform, 'COPY_ROTATION', org)
-        self.make_constraint(deform, 'COPY_ROTATION', handle)
+        self.make_constraint(deform, 'COPY_ROTATION', handle, space="LOCAL", use_xyz=[False, True, False], mix_mode="AFTER")
 
     @classmethod
     def add_parameters(self, params):
